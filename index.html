@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="WebQuest educativa para aprender Figma desde cero mediante una actividad guiada de diseño UX/UI.">
+  <title>WebQuest | Aprende Figma desde Cero</title>
+  <style>
+    :root {
+      --primary: #6c3df4;
+      --primary-dark: #4c27bd;
+      --secondary: #ff7262;
+      --accent: #19c37d;
+      --ink: #22243a;
+      --muted: #667085;
+      --surface: #ffffff;
+      --soft: #f5f3ff;
+      --line: #e8e7f0;
+      --shadow: 0 18px 45px rgba(35, 24, 88, .12);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(108,61,244,.16), transparent 28%),
+        radial-gradient(circle at top right, rgba(255,114,98,.14), transparent 24%),
+        #f8f9fd;
+      min-height: 100vh;
+    }
+
+    a { color: inherit; }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 72px 24px 92px;
+      color: #fff;
+      background: linear-gradient(135deg, #4c27bd 0%, #6c3df4 55%, #8b5cf6 100%);
+    }
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,.11);
+    }
+    .hero::before { width: 310px; height: 310px; right: -90px; top: -110px; }
+    .hero::after { width: 210px; height: 210px; left: -55px; bottom: -105px; }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 1120px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 36px;
+      align-items: center;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border: 1px solid rgba(255,255,255,.35);
+      border-radius: 999px;
+      background: rgba(255,255,255,.12);
+      font-size: .9rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 20px 0 14px;
+      font-size: clamp(2.4rem, 6vw, 4.8rem);
+      line-height: 1.02;
+      letter-spacing: -.045em;
+    }
+    .hero p {
+      max-width: 720px;
+      margin: 0;
+      font-size: 1.12rem;
+      line-height: 1.75;
+      color: rgba(255,255,255,.9);
+    }
+    .hero-card {
+      padding: 26px;
+      border: 1px solid rgba(255,255,255,.24);
+      border-radius: 26px;
+      background: rgba(255,255,255,.14);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 20px 50px rgba(25, 14, 76, .25);
+    }
+    .hero-card strong { display: block; font-size: 1.05rem; margin-bottom: 14px; }
+    .hero-card ul { margin: 0; padding-left: 20px; line-height: 1.85; color: rgba(255,255,255,.92); }
+
+    .nav-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      margin-top: -30px;
+      padding: 0 18px;
+    }
+    nav {
+      max-width: 1120px;
+      margin: auto;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,.8);
+      border-radius: 18px;
+      background: rgba(255,255,255,.92);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+    nav button {
+      border: 0;
+      padding: 12px 16px;
+      border-radius: 12px;
+      color: #4c4761;
+      background: transparent;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+    nav button:hover,
+    nav button.active {
+      color: #fff;
+      background: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    main {
+      width: min(1120px, calc(100% - 32px));
+      margin: 46px auto 70px;
+    }
+    section { display: none; animation: fade .28s ease; }
+    section.active { display: block; }
+    @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+    .panel {
+      padding: clamp(24px, 4vw, 46px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+    .section-head {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 26px;
+    }
+    .section-number {
+      flex: 0 0 52px;
+      width: 52px;
+      height: 52px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), #8b5cf6);
+      font-weight: 800;
+      box-shadow: 0 10px 22px rgba(108,61,244,.25);
+    }
+    h2 { margin: 0 0 7px; font-size: clamp(1.7rem, 4vw, 2.5rem); letter-spacing: -.025em; }
+    .lead { margin: 0; color: var(--muted); line-height: 1.75; }
+    p, li { line-height: 1.75; }
+
+    .question {
+      margin-top: 26px;
+      padding: 20px 22px;
+      border-left: 5px solid var(--secondary);
+      border-radius: 14px;
+      background: #fff5f3;
+    }
+    .question strong { color: #b9382a; }
+
+    .requirements,
+    .resource-grid,
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .mini-card,
+    .resource-card,
+    .step-card {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .mini-card:hover,
+    .resource-card:hover,
+    .step-card:hover {
+      transform: translateY(-4px);
+      border-color: #d7cffc;
+      box-shadow: 0 14px 30px rgba(40,30,95,.10);
+    }
+    .mini-card b,
+    .step-card h3,
+    .resource-card h3 { display: block; margin-bottom: 8px; }
+    .mini-card p,
+    .step-card p,
+    .resource-card p { margin: 0; color: var(--muted); font-size: .96rem; }
+
+    .steps-grid { grid-template-columns: repeat(2, 1fr); }
+    .step-card { position: relative; padding-left: 74px; }
+    .step-badge {
+      position: absolute;
+      left: 18px;
+      top: 20px;
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      color: #fff;
+      background: var(--primary);
+      font-weight: 800;
+    }
+    .step-card ul { margin: 10px 0 0; padding-left: 20px; color: var(--muted); }
+
+    .resource-card { display: flex; flex-direction: column; min-height: 190px; }
+    .resource-card.featured {
+      color: #fff;
+      border: 0;
+      background: linear-gradient(135deg, #ff7262, #ff9671);
+    }
+    .resource-card.featured p { color: rgba(255,255,255,.9); }
+    .resource-card a {
+      margin-top: auto;
+      display: inline-flex;
+      width: fit-content;
+      padding: 10px 14px;
+      border-radius: 10px;
+      color: #fff;
+      background: var(--primary);
+      text-decoration: none;
+      font-weight: 800;
+    }
+    .resource-card.featured a { color: #c83e31; background: #fff; }
+
+    .table-wrap { overflow-x: auto; border-radius: 16px; border: 1px solid var(--line); }
+    table { width: 100%; min-width: 780px; border-collapse: collapse; background: #fff; }
+    th, td { padding: 15px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { color: #fff; background: var(--primary-dark); }
+    tr:last-child td { border-bottom: 0; }
+    tbody tr:nth-child(even) { background: #faf9ff; }
+    .total { margin: 18px 0 0; font-weight: 800; color: var(--primary-dark); }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 22px;
+      padding: 0;
+      list-style: none;
+    }
+    .checklist li {
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: var(--soft);
+    }
+    .checklist li::before { content: "✓"; margin-right: 9px; color: var(--accent); font-weight: 900; }
+
+    footer {
+      padding: 28px 18px;
+      text-align: center;
+      color: #77758b;
+      font-size: .92rem;
+    }
+
+    @media (max-width: 820px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-card { display: none; }
+      .requirements, .resource-grid, .steps-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 580px) {
+      .hero { padding-top: 52px; }
+      .requirements, .resource-grid, .steps-grid, .checklist { grid-template-columns: 1fr; }
+      .step-card { padding-left: 20px; padding-top: 70px; }
+      .step-badge { left: 20px; }
+      nav { justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; }
+      nav button { white-space: nowrap; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <div>
+        <span class="eyebrow">Actividad educativa · UX/UI</span>
+        <h1>WebQuest: Aprende Figma desde Cero</h1>
+        <p>Explora, analiza y diseña una experiencia digital mediante un proceso guiado. Al finalizar, crearás un prototipo interactivo aplicando herramientas esenciales de Figma.</p>
+      </div>
+      <aside class="hero-card" aria-label="Resumen de la actividad">
+        <strong>Producto final</strong>
+        <ul>
+          <li>Prototipo de al menos 5 pantallas.</li>
+          <li>Navegación interactiva.</li>
+          <li>Uso de componentes y Auto Layout.</li>
+          <li>Explicación de decisiones de diseño.</li>
+        </ul>
+      </aside>
+    </div>
+  </header>
+
+  <div class="nav-wrap">
+    <nav aria-label="Navegación principal">
+      <button class="active" data-section="introduccion">Introducción</button>
+      <button data-section="tarea">Tarea</button>
+      <button data-section="proceso">Proceso</button>
+      <button data-section="recursos">Recursos</button>
+      <button data-section="evaluacion">Evaluación</button>
+      <button data-section="conclusion">Conclusión</button>
+    </nav>
+  </div>
+
+  <main>
+    <section id="introduccion" class="active">
+      <div class="panel">
+        <div class="section-head">
+          <div class="section-number">01</div>
+          <div><h2>Introducción</h2><p class="lead">Conoce el propósito de la actividad y el reto que desarrollarás.</p></div>
+        </div>
+        <p>Figma es una herramienta de diseño colaborativo utilizada para crear interfaces, prototipos y experiencias digitales. En esta WebQuest aprenderás a utilizar sus funciones principales y aplicarás principios básicos de UX/UI para desarrollar un proyecto visual, funcional y organizado.</p>
+        <p>Al finalizar, habrás adquirido habilidades utilizadas en el ámbito profesional del diseño y desarrollo de aplicaciones, como la creación de componentes, el uso de Auto Layout y la construcción de prototipos interactivos.</p>
+        <div class="question"><strong>Pregunta guía:</strong> ¿Cómo puede un buen diseño influir en la experiencia de los usuarios?</div>
+      </div>
+    </section>
+
+    <section id="tarea">
+      <div class="panel">
+        <div class="section-head">
+          <div class="section-number">02</div>
+          <div><h2>Tarea</h2><p class="lead">Diseña una solución visual completa y presenta el resultado de forma clara.</p></div>
+        </div>
+        <p>Diseña un prototipo interactivo de una aplicación con un mínimo de <strong>cinco pantallas</strong>. El proyecto deberá mantener una identidad visual coherente y permitir que el usuario navegue entre sus diferentes secciones.</p>
+        <div class="requirements">
+          <article class="mini-card"><b>5 pantallas</b><p>Inicio, acceso, contenido, detalle y una sección adicional.</p></article>
+          <article class="mini-card"><b>Componentes</b><p>Botones, menús y elementos reutilizables.</p></article>
+          <article class="mini-card"><b>Auto Layout</b><p>Distribución ordenada y adaptable de elementos.</p></article>
+          <article class="mini-card"><b>Prototipo</b><p>Conexiones funcionales entre las pantallas.</p></article>
+          <article class="mini-card"><b>Identidad visual</b><p>Colores, tipografías e íconos consistentes.</p></article>
+          <article class="mini-card"><b>Presentación</b><p>Enlace público y explicación de las decisiones tomadas.</p></article>
+        </div>
+        <div class="question"><strong>Entrega:</strong> comparte el enlace desde la opción <em>Share</em> de Figma y acompáñalo con una breve explicación sobre cómo tu diseño mejora la experiencia del usuario.</div>
+      </div>
+    </section>
+
+    <section id="proceso">
+      <div class="panel">
+        <div class="section-head">
+          <div class="section-number">03</div>
+          <div><h2>Proceso</h2><p class="lead">Sigue las etapas en orden para construir un prototipo funcional y atractivo.</p></div>
+        </div>
+        <div class="steps-grid">
+          <article class="step-card"><span class="step-badge">1</span><h3>Crear una cuenta</h3><p>Accede a Figma, crea una cuenta gratuita e inicia sesión con tu correo.</p></article>
+          <article class="step-card"><span class="step-badge">2</span><h3>Explorar la interfaz</h3><p>Identifica la barra de herramientas, capas, propiedades, frames, texto, figuras, opciones de compartir y exportar.</p></article>
+          <article class="step-card"><span class="step-badge">3</span><h3>Analizar una aplicación</h3><p>Selecciona una aplicación conocida y observa sus colores, tipografía, botones, íconos, distribución y experiencia de uso.</p></article>
+          <article class="step-card"><span class="step-badge">4</span><h3>Planificar el diseño</h3><p>Realiza un boceto en papel o digital para definir la distribución de cada pantalla antes de comenzar.</p></article>
+          <article class="step-card"><span class="step-badge">5</span><h3>Crear el proyecto</h3><p>Abre un archivo nuevo y crea los frames necesarios para una aplicación móvil con al menos cinco pantallas.</p></article>
+          <article class="step-card"><span class="step-badge">6</span><h3>Diseñar la interfaz</h3><p>Integra logotipo, títulos, botones, íconos, imágenes, colores consistentes y tipografías legibles.</p></article>
+          <article class="step-card"><span class="step-badge">7</span><h3>Usar herramientas avanzadas</h3><ul><li>Auto Layout.</li><li>Componentes.</li><li>Estilos de color y texto.</li><li>Alineación y duplicación.</li></ul></article>
+          <article class="step-card"><span class="step-badge">8</span><h3>Crear el prototipo</h3><p>Conecta las pantallas con la pestaña Prototype y comprueba que la navegación funcione correctamente.</p></article>
+          <article class="step-card"><span class="step-badge">9</span><h3>Revisar y entregar</h3><p>Corrige errores, verifica botones, consistencia visual, claridad de navegación y comparte el enlace final.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="recursos">
+      <div class="panel">
+        <div class="section-head">
+          <div class="section-number">04</div>
+          <div><h2>Recursos</h2><p class="lead">Consulta materiales de apoyo y los productos elaborados durante el proyecto.</p></div>
+        </div>
+        <div class="resource-grid">
+          <article class="resource-card featured">
+            <h3>Blog: Explorando Figma</h3>
+            <p>Consulta el blog del proyecto con información, explicaciones y contenidos relacionados con el aprendizaje de Figma.</p>
+            <a href="https://explorandofigma.blogspot.com/" target="_blank" rel="noopener noreferrer">Visitar Blogger</a>
+          </article>
+          <article class="resource-card"><h3>Sitio oficial de Figma</h3><p>Accede a la plataforma para crear tu cuenta y desarrollar el prototipo.</p><a href="https://www.figma.com/" target="_blank" rel="noopener noreferrer">Abrir recurso</a></article>
+          <article class="resource-card"><h3>Centro de ayuda</h3><p>Encuentra documentación y respuestas sobre herramientas y funciones.</p><a href="https://help.figma.com/" target="_blank" rel="noopener noreferrer">Abrir recurso</a></article>
+          <article class="resource-card"><h3>Biblioteca de recursos</h3><p>Explora guías, ejemplos, plantillas e información para mejorar tus diseños.</p><a href="https://www.figma.com/resource-library/" target="_blank" rel="noopener noreferrer">Abrir recurso</a></article>
+          <article class="resource-card"><h3>Canal oficial de Figma</h3><p>Consulta demostraciones y tutoriales publicados por el equipo de Figma.</p><a href="https://www.youtube.com/@Figma" target="_blank" rel="noopener noreferrer">Ver canal</a></article>
+          <article class="resource-card"><h3>Tutoriales para principiantes</h3><p>Busca videos introductorios para practicar las herramientas principales.</p><a href="https://www.youtube.com/results?search_query=Figma+para+principiantes" target="_blank" rel="noopener noreferrer">Ver tutoriales</a></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="evaluacion">
+      <div class="panel">
+        <div class="section-head">
+          <div class="section-number">05</div>
+          <div><h2>Evaluación</h2><p class="lead">La siguiente rúbrica muestra los criterios utilizados para valorar el trabajo final.</p></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Criterio</th><th>Valor</th><th>Excelente (3)</th><th>Bueno (2)</th><th>En proceso (1)</th></tr></thead>
+            <tbody>
+              <tr><td>Conocimiento de la interfaz</td><td>20%</td><td>Domina las herramientas básicas y explica su función.</td><td>Conoce la mayoría de las herramientas.</td><td>Presenta dificultades y necesita practicar.</td></tr>
+              <tr><td>Diseño del prototipo</td><td>35%</td><td>Completo, creativo, organizado y visualmente consistente.</td><td>Cumple la mayoría de los requisitos.</td><td>Está incompleto o poco organizado.</td></tr>
+              <tr><td>Uso de herramientas</td><td>25%</td><td>Utiliza correctamente componentes, estilos y Auto Layout.</td><td>Utiliza las herramientas con pocos errores.</td><td>Presenta dificultades en su aplicación.</td></tr>
+              <tr><td>Presentación</td><td>20%</td><td>Entrega el enlace y explica claramente sus decisiones.</td><td>Entrega el proyecto con una explicación breve.</td><td>La entrega o explicación está incompleta.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="total">Puntuación total: 100%</p>
+      </div>
+    </section>
+
+    <section id="conclusion">
+      <div class="panel">
+        <div class="section-head">
+          <div class="section-number">06</div>
+          <div><h2>Conclusión</h2><p class="lead">Reflexiona sobre lo aprendido y su aplicación en futuros proyectos.</p></div>
+        </div>
+        <p>Al completar esta WebQuest, contarás con las bases para diseñar interfaces y prototipos en Figma. También habrás practicado la planificación visual, la organización de componentes, la navegación entre pantallas y la creación de una experiencia clara para el usuario.</p>
+        <ul class="checklist">
+          <li>Reconoces las herramientas principales de Figma.</li>
+          <li>Organizas pantallas mediante frames y capas.</li>
+          <li>Creas componentes reutilizables.</li>
+          <li>Construyes un prototipo interactivo.</li>
+        </ul>
+        <div class="question"><strong>Pregunta final:</strong> ¿Cómo aplicarías los conocimientos adquiridos en Figma para desarrollar una interfaz atractiva, accesible y fácil de usar?</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>WebQuest educativa sobre Figma · Diseño UX/UI y prototipado interactivo</footer>
+
+  <script>
+    const buttons = document.querySelectorAll('nav button');
+    const sections = document.querySelectorAll('main section');
+
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        const target = button.dataset.section;
+        buttons.forEach(item => item.classList.remove('active'));
+        sections.forEach(section => section.classList.remove('active'));
+        button.classList.add('active');
+        document.getElementById(target).classList.add('active');
+        window.scrollTo({ top: document.querySelector('.nav-wrap').offsetTop, behavior: 'smooth' });
+      });
+    });
+  </script>
+</body>
+</html>
